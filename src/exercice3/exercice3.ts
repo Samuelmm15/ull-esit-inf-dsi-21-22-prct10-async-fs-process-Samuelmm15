@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 // Usar el método watch()
 // Los cambios deben de ser controlados en el directorio
 // Indicar el tipo de cambio que se ha producido
@@ -6,6 +7,7 @@
 import yargs from 'yargs';
 import {Note} from './note';
 import chalk from 'chalk';
+import {watch} from 'fs';
 import * as fs from 'fs';
 
 /**
@@ -45,10 +47,11 @@ yargs.command({
           (typeof argv.colour === 'string')) {
       if ((argv.colour === 'red') || (argv.colour === 'blue') || (argv.colour === 'yellow') || (argv.colour === 'green')) {
         const object = new Note(argv.title, argv.body, argv.colour, argv.user);
-        fs.readdir(`src/notes/${argv.user}`, (err, data) => {
+        fs.readdir(`src/exercice3/notes/${argv.user}`, (err, data) => {
           if (err) {
             console.log(chalk.red('There must be a problem'));
-          } else {
+          } else { // In the case that the directory exists
+            // At this point the program starts to comprobe if the directory change
             let flag: number = 1;
             data.forEach((item) => {
               if (item === `${argv.title}.json`) {
@@ -58,7 +61,7 @@ yargs.command({
             if (flag === 0) {
               console.log(chalk.red('The file that is trying to add already exists'));
             } else {
-              fs.writeFile(`src/notes/${argv.user}/${argv.title}.json`, JSON.stringify(object), (err) => {
+              fs.writeFile(`src/exercice3/notes/${argv.user}/${argv.title}.json`, JSON.stringify(object), (err) => {
                 if (err) {
                   console.log(chalk.red('There must be a problem to write the file'));
                 } else {
@@ -92,14 +95,14 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.user === 'string') {
-      fs.readdir(`src/notes/${argv.user}`, (err, data) => {
+      fs.readdir(`src/exercice3/notes${argv.user}`, (err, data) => {
         if (err) {
           console.log(chalk.red('There must be a problem'));
         } else {
           if (data.length > 0) {
             console.log(chalk.grey('Files List: '));
             data.forEach((item) => {
-              fs.readFile(`src/notes/${argv.user}/${item}`, (err, readData) => {
+              fs.readFile(`src/exercice3/notes/${argv.user}/${item}`, (err, readData) => {
                 if (err) {
                   console.log(chalk.red('There must be a problem to read'));
                 } else {
@@ -152,12 +155,12 @@ yargs.command({
   handler(argv) {
     if ((typeof argv.user === 'string') &&
       (typeof argv.title === 'string')) {
-      fs.readdir(`src/notes/${argv.user}`, (err, data) => {
+      fs.readdir(`src/exercice3/notes/${argv.user}`, (err, data) => {
         let flag: number = 1;
         data.forEach((item) => {
           if (item === `${argv.title}.json`) {
             flag = 0;
-            fs.readFile(`src/notes/${argv.user}/${argv.title}.json`, (err, readData) => {
+            fs.readFile(`src/exercice3/notes/${argv.user}/${argv.title}.json`, (err, readData) => {
               if (err) {
                 console.log(chalk.red('There must be a problem to read'));
               } else {
@@ -196,7 +199,7 @@ yargs.command({
   handler(argv) {
     if ((typeof argv.user === 'string') &&
       (typeof argv.title === 'string')) {
-      fs.unlink(`src/notes/${argv.user}/${argv.title}.json`, (err) => {
+      fs.unlink(`src/exercice3/notes/${argv.user}/${argv.title}.json`, (err) => {
         if (err) {
           console.log(chalk.red('There must be a problem to remove'));
         } else {
@@ -233,20 +236,20 @@ yargs.command({
   handler(argv) {
     if ((typeof argv.user === 'string') && (typeof argv.title === 'string') && (typeof argv.body === 'string')) {
       let flag: number = 1;
-      fs.readdir(`src/notes/${argv.user}`, (err, data) => {
+      fs.readdir(`src/exercice3/notes/${argv.user}`, (err, data) => {
         if (err) {
           console.log(chalk.red('There must be a problem'));
         } else {
           data.forEach((item) => {
             if (item === `${argv.title}.json`) {
               flag = 0;
-              fs.readFile(`src/notes/${argv.user}/${argv.title}.json`, (err, readData) => {
+              fs.readFile(`src/exercice3/notes/${argv.user}/${argv.title}.json`, (err, readData) => {
                 if (err) {
                   console.log(chalk.red('There must be a problem to read'));
                 } else {
                   const object = JSON.parse(readData.toString());
                   object.body = `${argv.body}`;
-                  fs.writeFile(`src/notes/${argv.user}/${argv.title}.json`, JSON.stringify(object), (err) => {
+                  fs.writeFile(`src/exercice3/notes/${argv.user}/${argv.title}.json`, JSON.stringify(object), (err) => {
                     if (err) {
                       console.log(chalk.red('There must be a problem to write the file'));
                     } else {
@@ -281,7 +284,7 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.user === 'string') {
-      fs.readdir(`src/notes`, (err, data) => {
+      fs.readdir(`src/exercice3/notes`, (err, data) => {
         if (err) {
           console.log(chalk.red('There must be a problem'));
         } else {
@@ -289,7 +292,7 @@ yargs.command({
             if (item === argv.user) {
               console.log(chalk.red('The user that is going to add already exists'));
             } else {
-              fs.mkdir(`src/notes/${argv.user}`, (err) => {
+              fs.mkdir(`src/exercice3/notes/${argv.user}`, (err) => {
                 if (err) {
                   console.log(chalk.red('There must be a problem to create the user'));
                 } else {
@@ -311,7 +314,7 @@ yargs.command({
   command: 'userList',
   describe: 'List the user directorys',
   handler() {
-    fs.readdir(`src/notes`, (err, data) => {
+    fs.readdir(`src/exercice3/notes`, (err, data) => {
       if (err) {
         console.log(chalk.red('There must be a problem'));
       } else {
@@ -324,5 +327,14 @@ yargs.command({
   },
 });
 
-yargs.parse();
-
+// fs.watch(`src/exercice3/notes/Samuel`, (eventType, filename) => {
+//   console.log('The file was modificated', filename);
+//   console.log('The type of change was: ', eventType);
+// });
+const test = fs.watch(`src/exercice3/notes/Samuel`); // Esto puede ser el objeto watcher
+setTimeout(
+    () => yargs.parse(), 1000
+);
+if (test.emit('change')) {
+  console.log('Se ha producido un cambio en el directorio');
+}
