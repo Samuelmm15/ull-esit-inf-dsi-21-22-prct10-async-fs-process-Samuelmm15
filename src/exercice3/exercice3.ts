@@ -1,13 +1,6 @@
-/* eslint-disable comma-dangle */
-// Usar el método watch()
-// Los cambios deben de ser controlados en el directorio
-// Indicar el tipo de cambio que se ha producido
-// Contestar a las últimas preguntas
-
 import yargs from 'yargs';
 import {Note} from './note';
 import chalk from 'chalk';
-import {watch} from 'fs';
 import * as fs from 'fs';
 
 /**
@@ -327,14 +320,5 @@ yargs.command({
   },
 });
 
-// fs.watch(`src/exercice3/notes/Samuel`, (eventType, filename) => {
-//   console.log('The file was modificated', filename);
-//   console.log('The type of change was: ', eventType);
-// });
-const test = fs.watch(`src/exercice3/notes/Samuel`); // Esto puede ser el objeto watcher
-setTimeout(
-    () => yargs.parse(), 1000
-);
-if (test.emit('change')) {
-  console.log('Se ha producido un cambio en el directorio');
-}
+
+yargs.parse();

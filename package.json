@@ -36,6 +36,7 @@
     "dependencies": {
         "chalk": "^4.1.2",
         "eslint-plugin": "^1.0.1",
+        "fs": "^0.0.1-security",
         "inquire": "^0.4.8",
         "lowdb": "^1.0.0",
         "node": "^17.7.2",
