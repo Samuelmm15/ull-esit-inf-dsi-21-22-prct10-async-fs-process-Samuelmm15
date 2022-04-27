@@ -153,6 +153,41 @@ yargs.command({
   },
 });
 
-
+yargs.command({ // COMPROBAR ESTE COMANDO, EXISTE UN PROBLEMA
+  command: 'cp',
+  describe: 'Copy and move files or directorys',
+  builder: {
+  },
+  handler() {
+    if (process.argv.length !== 5) {
+      console.log(chalk.red('Please, specify a route to obtain the file or directory and the destination.'));
+      console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js cp [Origin] [Destination]'));
+    } else {
+      if ((typeof process.argv[3] === 'string') && (typeof process.argv[4] === 'string')) {
+        fs.lstat(process.argv[3], (err, stats) => {
+          if (err) {
+            console.log(chalk.red('There must be a problem'));
+          } else if (stats.isFile()) {
+            fs.copyFile(process.argv[3], process.argv[4], (err) => {
+              if (err) {
+                console.log(chalk.red('There must be a problem to copy the File'));
+              } else {
+                console.log(chalk.green('The File was succefully copied'));
+              }
+            });
+          } else if (stats.isDirectory()) {
+            fs.cp(process.argv[3], process.argv[4], (err) => {
+              if (err) {
+                console.log(chalk.red('There must be a problem to copy the directory'));
+              } else {
+                console.log(chalk.green('The directory was succefully copied'));
+              }
+            });
+          }
+        });
+      }
+    }
+  },
+});
 
 yargs.parse();
