@@ -69,7 +69,6 @@ export class CommandProgram {
       command: 'ls',
       describe: 'List the content of a specific path',
       builder: {
-
       },
       handler() {
         if (process.argv.length !== 4) {
