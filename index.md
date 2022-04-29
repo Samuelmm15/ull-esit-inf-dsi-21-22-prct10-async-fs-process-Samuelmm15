@@ -551,7 +551,8 @@ yargs.command({
     The number of coincidencis is 1
     ```
 
-    [IMAGEN]
+    
+    ![image-1](https://user-images.githubusercontent.com/72341631/165993689-821a16e3-9cff-4c8e-9451-3521d0d71c3c.png)
 
     Ejecución:
 
@@ -565,7 +566,7 @@ yargs.command({
     The file that is triying to use does not exist
     ```
 
-    [IMAGEN]
+    ![image-2](https://user-images.githubusercontent.com/72341631/165993758-cd405347-cad0-4aa0-8953-cceb523c5b51.png)
 
   - Comprobación de la segunda manera:
 
@@ -585,7 +586,7 @@ yargs.command({
     The number of coincidencis is 3
     ```
 
-    [IMAGEN]
+    ![image-3](https://user-images.githubusercontent.com/72341631/165993801-1a1600ea-d9ab-4709-be86-2e558038e02a.png)
 
     Ejecución:
 
@@ -599,7 +600,7 @@ yargs.command({
     The file that is triying to use does not exist
     ```
 
-    [IMAGEN]
+    ![image-4](https://user-images.githubusercontent.com/72341631/165993851-4083ba78-2d9e-4006-bbdc-32529d6c0aa5.png)
 
 - Prueba y testeo del ejercicio 3:
 
@@ -621,7 +622,7 @@ yargs.command({
   Added a new File called newNote.json
   ```
 
-  [IMAGEN]
+  ![image-5](https://user-images.githubusercontent.com/72341631/165993905-eab4a5d0-9760-4def-934f-6087fffd9b2b.png)
 
   Ejecución terminal 2:
 
@@ -635,7 +636,7 @@ yargs.command({
   Removed the File called newNote.json
   ```
 
-  [IMAGEN]
+  ![image-6](https://user-images.githubusercontent.com/72341631/165993940-c2b1c8e0-24ff-42fa-855b-8437330f9219.png)
 
   Ejecución terminal 1:
 
@@ -650,7 +651,7 @@ yargs.command({
   Specified a new path
   ```
 
-  [IMAGEN]
+  ![image-7](https://user-images.githubusercontent.com/72341631/165993973-866c186f-39ce-4adc-8332-6a160a4c7f90.png)
 
 - Prueba y testeo del ejercicio 4:
 
@@ -666,7 +667,7 @@ yargs.command({
   The directory was succefully created
   ```
 
-  [IMAGEN]
+  ![image-8](https://user-images.githubusercontent.com/72341631/165994008-7dd21f81-997c-47c0-929c-67a3774d9b21.png)
 
   Ejecución comando 2:
 
@@ -680,7 +681,7 @@ yargs.command({
   test-dir
   ```
 
-  [IMAGEN]
+  ![image-9](https://user-images.githubusercontent.com/72341631/165994105-3451c846-f3c9-46ca-a35d-c7f1a8a7b8d8.png)
 
   Ejecución comando 2:
 
@@ -694,7 +695,7 @@ yargs.command({
   index.md: Java source, UTF-8 Unicode text, with very long lines
   ```
 
-  [IMAGEN]
+  ![image-10](https://user-images.githubusercontent.com/72341631/165994159-f16bf154-99c7-4651-83bd-e7274f75bccc.png)
 
   Ejecución comando 3:
 
@@ -713,7 +714,7 @@ yargs.command({
   exercice4
   ```
 
-  [IMAGEN]
+  ![image-11](https://user-images.githubusercontent.com/72341631/165994199-8edeccb7-dbcc-421b-abd1-c830053e470f.png)
 
   Ejecución del comando 4:
 
@@ -740,7 +741,7 @@ yargs.command({
   [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ULL-ESIT-INF-DSI-2122_ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ULL-ESIT-INF-DSI-2122_ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15)
   ```
 
-  [IMAGEN]
+  ![image-12](https://user-images.githubusercontent.com/72341631/165994222-c23e9694-0880-4305-8411-d5081d8fb60a.png)
 
   Ejecución del comando 5:
 
@@ -755,7 +756,7 @@ yargs.command({
   The directory was succefully deleted
   ```
 
-  [IMAGEN]
+  ![image-13](https://user-images.githubusercontent.com/72341631/165994240-ffeea7d7-5ee7-444b-b463-c9a94b7585eb.png)
 
   Ejecución del comando 6:
 
@@ -769,7 +770,7 @@ yargs.command({
   The File was succefully moved
   ```
 
-  [IMAGEN]
+  ![image-14](https://user-images.githubusercontent.com/72341631/165994265-b08d4b9a-cb8d-4c58-9f90-edab4192c30d.png)
 
 ### // Conclusión <a name="id8"></a>
 
