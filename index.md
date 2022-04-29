@@ -273,7 +273,48 @@ private secondMethod() {
 
 Para la realización del tercer ejercicio, se solicita el empleo de la aplicación de notas desarrollada para la **Práctica 9** de la asignatura. Pero, para este ejercicio número tres se hace uso del método `watch`, que, permite observar los cambios que se producen dentro del sistema de ficheros, además, incluye la opción de determinar el tipo de cambio que se ha producido dentro de este.
 
-<!-- FALTA CONTESTAR A LAS PREGUNTAS -->
+Como se puede observar en el fragmento de código adjunto a continuación, la implementación del método `watch` para determinar si dentro de un directorio se ha producido un cambio, y, además, determinar el tipo de cambio que es, es de la manera:
+
+```
+yargs.command({
+  command: 'route',
+  describe: 'Specifies the path of the directory to watch',
+  builder: {
+  },
+  handler() {
+    if (process.argv.length !== 4) {
+      console.log(chalk.red('Enter the execution correctly'));
+      console.log(chalk.yellow('node dist/exercice3/watchProgram.js route [path]'));
+    } else {
+      fs.access(process.argv[3], fs.constants.F_OK, (err) => {
+        if (err) {
+          console.log(chalk.red('The specified path does not exist'));
+          console.log(chalk.green('Specified a new path'));
+        } else {
+          fs.watch(process.argv[3], {persistent: true}, (eventType, filename) => {
+            if (eventType === 'change') {
+              console.clear();
+              console.log(chalk.green(`Added a new File called ${filename}`));
+            } else if (eventType === 'rename') {
+              console.clear();
+              console.log(chalk.green(`Removed the File called ${filename}`));
+            }
+          });
+        }
+      });
+    }
+  },
+});
+```
+
+Para finalizar con este tercera tarea, se han de responder una serie de preguntas:
+- ¿Cómo haría para mostrar, no solo el nombre, sino también el contenido del fichero, en el caso de que haya sido creado o modificado?
+
+Para poder mostrar el contenido del fichero creado o modificado, en este caso se puede hacer uso de la expansión del comando de linux `cat`, que permite mostrar el contenido del fichero que ha sido creado o que se ha modificado. Es por ello que cuando se produce un evento en el directorio del tipo de crear un nuevo fichero o que haya sido modificado uno existente, pues se aplica el método `spawn()` que permite extender el comando cat de linux, pudiendo mostrar el contenido de dicho fichero.
+
+- ¿Cómo haría para que no solo se observase el directorio de un único usuario sino todos los directorios correspondientes a los diferentes usuarios de la aplicación de notas?
+
+Para poder observar el directorio que contiene todos los directorios correspondientes con los distintos usaurios de la aplicación de notas, es necesario establecer esta ruta como ruta del directorio que va a ser observado, por tanto, si se produce algún cambio dentro de este directorio, se va a registrar un evento y por tanto, podrá ser mostrado por pantalla el tipo de evento que se ha producido.
 
 ### /// Ejercicio 4 <a name="id6"></a>
 
@@ -293,13 +334,12 @@ yargs.command({
           console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js file [path]'));
         } else {
           if (typeof process.argv[3] === 'string') {
-            fs.lstat(process.argv[3], (err, stats) => {
+            fs.access(process.argv[3], fs.constants.F_OK, (err) => {
               if (err) {
-                console.log(chalk.red('The specified path does not exist'));
-              } else if (stats.isFile()) {
-                console.log(chalk.green('It is a File'));
-              } else if (stats.isDirectory()) {
-                console.log(chalk.green('It is a directory'));
+                console.log(chalk.red('The introduced path was wrong'));
+              } else {
+                const file = spawn('file', [process.argv[3]]);
+                file.stdout.pipe(process.stdout);
               }
             });
           }
@@ -322,12 +362,9 @@ yargs.command({
           console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js mkdir [path]'));
         } else {
           if (typeof process.argv[3] === 'string') {
-            fs.mkdir(process.argv[3], (err) => {
-              if (err) {
-                console.log(chalk.red('The specified path already exist.'));
-              } else {
-                console.log(chalk.green('The directory was succefully created'));
-              }
+            const mkdir = spawn('mkdir', [process.argv[3]]);
+            mkdir.on('close', () => {
+              console.log(chalk.green('The directory was succefully created'));
             });
           }
         }
@@ -349,13 +386,12 @@ yargs.command({
           console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js ls [path]'));
         } else {
           if (typeof process.argv[3] === 'string') {
-            fs.readdir(process.argv[3], (err, data) => {
+            fs.access(process.argv[3], fs.constants.F_OK, (err) => {
               if (err) {
-                console.log(chalk.red('The specified path is wrong'));
+                console.log('The introduced path was wrong');
               } else {
-                data.forEach((item) => {
-                  console.log(chalk.cyan(item));
-                });
+                const ls = spawn('ls', [process.argv[3]]);
+                ls.stdout.pipe(process.stdout);
               }
             });
           }
@@ -378,11 +414,12 @@ yargs.command({
           console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js cat [path]'));
         } else {
           if (typeof process.argv[3] === 'string') {
-            fs.readFile(process.argv[3], (err, data) => {
+            fs.access(process.argv[3], fs.constants.F_OK, (err) => {
               if (err) {
-                console.log(chalk.red('The file specified does not exist.'));
+                console.log(chalk.red('The specified path was wrong'));
               } else {
-                console.log(data.toString());
+                const cat = spawn('cat', [process.argv[3]]);
+                cat.stdout.pipe(process.stdout);
               }
             });
           }
@@ -408,25 +445,19 @@ yargs.command({
             inquirer.prompt({type: "confirm", name: "Continue", message: `Are you sure to delete ${process.argv[3]} ?`})
                 .then((answers) => {
                   if (answers["Continue"] === true) {
-                    fs.unlink(process.argv[3], (err) => {
-                      if (err) { // If the path is a directory
-                        fs.lstat(process.argv[3], (err, stats) => {
-                          if (err) {
-                            console.log(chalk.red('The specified path does not exist'));
-                          } else if (stats.isFile()) {
-                            console.log(chalk.green('There must be a problem to delete the File'));
-                          } else if (stats.isDirectory()) {
-                            fs.rmdir(process.argv[3], (err) => {
-                              if (err) {
-                                console.log(chalk.red('There must be a problem to delete the directory'));
-                              } else {
-                                console.log(chalk.green('The directory was succefully deleted'));
-                              }
-                            });
-                          }
+                    fs.lstat(process.argv[3], (err, stats) => {
+                      if (err) {
+                        console.log(chalk.red('The specified path does not exist'));
+                      } else if (stats.isFile()) {
+                        const rm = spawn('rm', [process.argv[3]]);
+                        rm.on('close', () => {
+                          console.log(chalk.green('The File was succefully deleted'));
                         });
-                      } else {
-                        console.log(chalk.green('The file was succefully deleted'));
+                      } else if (stats.isDirectory()) {
+                        const rmdir = spawn('rmdir', [process.argv[3]]);
+                        rmdir.on('close', () => {
+                          console.log(chalk.green('The directory was succefully deleted'));
+                        });
                       }
                     });
                   } else {
@@ -439,11 +470,140 @@ yargs.command({
     });
 ```
 
-<!-- FALTA POR TERMINAR ESTE APARTADO -->
 Por último, se tiene el comando `cp`, que permite copiar ficheros y directorios, a partir de una ruta origen y una ruta destino que ha sido especificada.
+
+```
+yargs.command({
+      command: 'cp',
+      describe: 'Copy and move files or directorys',
+      builder: {
+      },
+      handler() {
+        if (process.argv.length !== 5) {
+          console.log(chalk.red('Please, specify a path to obtain the file or directory and the destination.'));
+          console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js cp [Origin] [Destination]'));
+        } else {
+          if ((typeof process.argv[3] === 'string') && (typeof process.argv[4] === 'string')) {
+            fs.lstat(process.argv[3], (err, stats) => {
+              if (err) {
+                console.log(chalk.red('There must be a problem'));
+              } else if (stats.isFile()) {
+                fs.access(process.argv[3], fs.constants.F_OK, (err) => {
+                  if (err) {
+                    console.log(chalk.red('The first introduced path is wrong'));
+                  } else {
+                    fs.access(process.argv[4], fs.constants.F_OK, (err) => {
+                      if (err) {
+                        console.log(chalk.red('The second introduced path is wrong'));
+                      } else {
+                        const mv = spawn('mv', [process.argv[3], process.argv[4]]);
+                        mv.on('close', () => {
+                          console.log(chalk.green('The File was succefully moved'));
+                        });
+                      }
+                    });
+                  }
+                });
+              } else if (stats.isDirectory()) {
+                fs.access(process.argv[3], fs.constants.F_OK, (err) => {
+                  if (err) {
+                    console.log(chalk.red('The first introduced path is wrong'));
+                  } else {
+                    fs.access(process.argv[4], fs.constants.F_OK, (err) => {
+                      if (err) {
+                        console.log(chalk.red('The second introduced path is wrong'));
+                      } else {
+                        const cp = spawn('cp', ['-r', process.argv[3], process.argv[4]]);
+                        cp.on('close', () => {
+                          console.log(chalk.green('The directory was succefully copied'));
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        }
+      },
+    });
+```
 
 ### /// Pruebas y testeos <a name="id7"></a>
 
+- Prueba y testeo del ejercicio 2:
+
+  - Comprobación de la primera manera:
+
+    Forma de ejecutar:
+
+    ```
+    samu@Samuel:/mnt/c/Users/samue/Documents/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15$ node dist/exercice2/exercice2.js catGrepOption --file="src/Files/test.txt" --word="nombre" --method="1"
+    ```
+
+    Resultado:
+
+    ```
+    File Content:
+    Hola mi nombre es Samu y aquí hay un segundo Hola
+
+
+    The number of coincidencis is 1
+    ```
+
+    [IMAGEN]
+
+    Ejecución:
+
+    ```
+    samu@Samuel:/mnt/c/Users/samue/Documents/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15$ node dist/exercice2/exercice2.js catGrepOption --file="src/Files/example.txt" --word="Hola" --method="1"
+    ```
+
+    Resultado:
+
+    ```
+    The file that is triying to use does not exist
+    ```
+
+    [IMAGEN]
+
+  - Comprobación de la segunda manera:
+
+    Forma de ejecutar:
+
+    ```
+    samu@Samuel:/mnt/c/Users/samue/Documents/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15$ node dist/exercice2/exercice2.js catGrepOption --file="src/Files/test.txt" --word="Hola" --method="2"
+    ```
+
+    Resultado:
+
+    ```
+    File Content:
+    Hola esto es una prueba
+    Hola mi nombre es Samu y aquí hay un segundo Hola
+
+    The number of coincidencis is 3
+    ```
+
+    [IMAGEN]
+
+    Ejecución:
+
+    ```
+    samu@Samuel:/mnt/c/Users/samue/Documents/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15$ node dist/exercice2/exercice2.js catGrepOption --file="src/Files/example.txt" --word="Hola" --method="2"
+    ```
+
+    Resultado:
+
+    ```
+    The file that is triying to use does not exist
+    ```
+
+    [IMAGEN]
+
+- Prueba y testeo del ejercicio 3:
+
+- Prueba y testeo del ejercicio 4:
 ### // Conclusión <a name="id8"></a>
 
 Para concluir, este décima práctica de la asignatura, me ha permitido comprender un poco mejor, el manejo, empleo y creación de procesos en Node js, ya que, en ocasiones, me han generado ciertos problemas debido al desconocimiento en el correcto empleo de esto.
