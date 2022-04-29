@@ -4,11 +4,23 @@ import * as fs from 'fs';
 import inquirer from "inquirer";
 import {spawn} from "child_process";
 
+/**
+ * This class executes the 6 linux commands
+ */
 export class CommandProgram {
+  /**
+   * This is the constructor of the class.
+   */
   constructor() {
     this.run();
   }
+  /**
+   * This is the method that run the different commands to use.
+   */
   private run(): void {
+    /**
+     * This command returns the type of a specific item of a path.
+     */
     yargs.command({
       command: 'file',
       describe: 'Returns the type of a specific item of a path.',
@@ -33,6 +45,9 @@ export class CommandProgram {
       },
     });
 
+    /**
+     * This command creates a directory at a specific path.
+     */
     yargs.command({
       command: 'mkdir',
       describe: 'Create a directory at the specific path.',
@@ -53,6 +68,9 @@ export class CommandProgram {
       },
     });
 
+    /**
+     * This command lists the content of a specific path.
+     */
     yargs.command({
       command: 'ls',
       describe: 'List the content of a specific path',
@@ -77,6 +95,9 @@ export class CommandProgram {
       },
     });
 
+    /**
+     * This command shows the content of a specific file.
+     */
     yargs.command({
       command: 'cat',
       describe: 'Show the content of a specified file.',
@@ -101,6 +122,9 @@ export class CommandProgram {
       },
     });
 
+    /**
+     * This command deletes files and directorys of a specific path.
+     */
     yargs.command({
       command: 'rm',
       describe: 'Delete files and directorys.',
@@ -139,6 +163,10 @@ export class CommandProgram {
       },
     });
 
+    /**
+     * This command copies and moves files or directorys from an origin to a
+     * destination.
+     */
     yargs.command({
       command: 'cp',
       describe: 'Copy and move files or directorys',

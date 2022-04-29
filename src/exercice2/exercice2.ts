@@ -4,7 +4,17 @@ import yargs from 'yargs';
 import chalk from 'chalk';
 import * as fs from 'fs';
 
+/**
+ * This class makes to methods to comprobe coincidences of a word
+ * in a text file
+ */
 class CatGrepCommand {
+  /**
+   * This is the constructor of the class
+   * @param fileRoute Consists in the name of the text file
+   * @param word Consists in the word to search in the text file
+   * @param method Consists in the method to use
+   */
   constructor(private fileRoute: string, private word: string, private method: number) {
     if (this.method === 1) {
       this.firstMethod();
@@ -14,6 +24,9 @@ class CatGrepCommand {
       console.log(chalk.red('The selected method does not exists'));
     }
   }
+  /**
+   * This is the first method to use
+   */
   private firstMethod() { // Este es el método con el pipe
     const cat = spawn('cat', [this.fileRoute]);
     const grep = spawn('grep', [this.word]);
@@ -42,6 +55,9 @@ class CatGrepCommand {
       }
     });
   }
+  /**
+   * This is the second method to use
+   */
   private secondMethod() { // Esto es sin el método pipe
     const catGrep = spawn('cat', [this.fileRoute, 'grep', this.word]);
     let counter: number = 0;
@@ -70,6 +86,9 @@ class CatGrepCommand {
   }
 }
 
+/**
+ * This option can help us to use the program
+ */
 yargs.command({
   command: 'catGrepOption',
   describe: 'This command counts the number of coincidencis of a specific string in a specific file',

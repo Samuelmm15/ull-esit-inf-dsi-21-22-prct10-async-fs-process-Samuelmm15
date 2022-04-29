@@ -4,6 +4,10 @@ import * as fs from 'fs';
 import chalk from 'chalk';
 import yargs from 'yargs';
 
+/**
+ * This command specifies the route of the file to watch
+ * the events that can happend in it.
+ */
 yargs.command({
   command: 'route',
   describe: 'Specifies the path of the directory to watch',
