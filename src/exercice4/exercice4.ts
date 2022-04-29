@@ -1,16 +1,8 @@
-// Método wrapper de obtener los distintos comandos de manejo de ficheros de linux
-// Si se da una ruta especifica, mostrar si es un directorio o un fichero (HECHO)
-// Crear un directorio a partir de una ruta especifica (HECHO)
-// Listar ficheros dentro de un directorio (Hecho)
-// Mostrar el contenido del fichero (similar a cat) (Hecho)
-// Borrar ficheros y directorios (HECHO)
-// Mover ficheros o directorios de un punto a, a un punto b (NO FUNCIONA DE MANERA CORRECTA)
-// Hacer uso de yargs para controlar todo esto anterior
-
 import yargs from "yargs";
 import chalk from 'chalk';
 import * as fs from 'fs';
 import inquirer from "inquirer";
+import {spawn} from "child_process";
 
 export class CommandProgram {
   constructor() {
@@ -28,13 +20,12 @@ export class CommandProgram {
           console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js file [path]'));
         } else {
           if (typeof process.argv[3] === 'string') {
-            fs.lstat(process.argv[3], (err, stats) => {
+            fs.access(process.argv[3], fs.constants.F_OK, (err) => {
               if (err) {
-                console.log(chalk.red('The specified path does not exist'));
-              } else if (stats.isFile()) {
-                console.log(chalk.green('It is a File'));
-              } else if (stats.isDirectory()) {
-                console.log(chalk.green('It is a directory'));
+                console.log(chalk.red('The introduced path was wrong'));
+              } else {
+                const file = spawn('file', [process.argv[3]]);
+                file.stdout.pipe(process.stdout);
               }
             });
           }
@@ -53,12 +44,9 @@ export class CommandProgram {
           console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js mkdir [path]'));
         } else {
           if (typeof process.argv[3] === 'string') {
-            fs.mkdir(process.argv[3], (err) => {
-              if (err) {
-                console.log(chalk.red('The specified path already exist.'));
-              } else {
-                console.log(chalk.green('The directory was succefully created'));
-              }
+            const mkdir = spawn('mkdir', [process.argv[3]]);
+            mkdir.on('close', () => {
+              console.log(chalk.green('The directory was succefully created'));
             });
           }
         }
@@ -76,13 +64,12 @@ export class CommandProgram {
           console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js ls [path]'));
         } else {
           if (typeof process.argv[3] === 'string') {
-            fs.readdir(process.argv[3], (err, data) => {
+            fs.access(process.argv[3], fs.constants.F_OK, (err) => {
               if (err) {
-                console.log(chalk.red('The specified path is wrong'));
+                console.log('The introduced path was wrong');
               } else {
-                data.forEach((item) => {
-                  console.log(chalk.cyan(item));
-                });
+                const ls = spawn('ls', [process.argv[3]]);
+                ls.stdout.pipe(process.stdout);
               }
             });
           }
@@ -101,11 +88,12 @@ export class CommandProgram {
           console.log(chalk.yellow('The structure of the command is: node dist/exercice4/exercice4.js cat [path]'));
         } else {
           if (typeof process.argv[3] === 'string') {
-            fs.readFile(process.argv[3], (err, data) => {
+            fs.access(process.argv[3], fs.constants.F_OK, (err) => {
               if (err) {
-                console.log(chalk.red('The file specified does not exist.'));
+                console.log(chalk.red('The specified path was wrong'));
               } else {
-                console.log(data.toString());
+                const cat = spawn('cat', [process.argv[3]]);
+                cat.stdout.pipe(process.stdout);
               }
             });
           }
@@ -127,25 +115,19 @@ export class CommandProgram {
             inquirer.prompt({type: "confirm", name: "Continue", message: `Are you sure to delete ${process.argv[3]} ?`})
                 .then((answers) => {
                   if (answers["Continue"] === true) {
-                    fs.unlink(process.argv[3], (err) => {
-                      if (err) { // If the path is a directory
-                        fs.lstat(process.argv[3], (err, stats) => {
-                          if (err) {
-                            console.log(chalk.red('The specified path does not exist'));
-                          } else if (stats.isFile()) {
-                            console.log(chalk.green('There must be a problem to delete the File'));
-                          } else if (stats.isDirectory()) {
-                            fs.rmdir(process.argv[3], (err) => {
-                              if (err) {
-                                console.log(chalk.red('There must be a problem to delete the directory'));
-                              } else {
-                                console.log(chalk.green('The directory was succefully deleted'));
-                              }
-                            });
-                          }
+                    fs.lstat(process.argv[3], (err, stats) => {
+                      if (err) {
+                        console.log(chalk.red('The specified path does not exist'));
+                      } else if (stats.isFile()) {
+                        const rm = spawn('rm', [process.argv[3]]);
+                        rm.on('close', () => {
+                          console.log(chalk.green('The File was succefully deleted'));
                         });
-                      } else {
-                        console.log(chalk.green('The file was succefully deleted'));
+                      } else if (stats.isDirectory()) {
+                        const rmdir = spawn('rmdir', [process.argv[3]]);
+                        rmdir.on('close', () => {
+                          console.log(chalk.green('The directory was succefully deleted'));
+                        });
                       }
                     });
                   } else {
@@ -157,7 +139,7 @@ export class CommandProgram {
       },
     });
 
-    yargs.command({ // COMPROBAR ESTE COMANDO, EXISTE UN PROBLEMA
+    yargs.command({
       command: 'cp',
       describe: 'Copy and move files or directorys',
       builder: {
@@ -172,19 +154,37 @@ export class CommandProgram {
               if (err) {
                 console.log(chalk.red('There must be a problem'));
               } else if (stats.isFile()) {
-                fs.copyFile(process.argv[3], process.argv[4], (err) => {
+                fs.access(process.argv[3], fs.constants.F_OK, (err) => {
                   if (err) {
-                    console.log(chalk.red('There must be a problem to copy the File'));
+                    console.log(chalk.red('The first introduced path is wrong'));
                   } else {
-                    console.log(chalk.green('The File was succefully copied'));
+                    fs.access(process.argv[4], fs.constants.F_OK, (err) => {
+                      if (err) {
+                        console.log(chalk.red('The second introduced path is wrong'));
+                      } else {
+                        const mv = spawn('mv', [process.argv[3], process.argv[4]]);
+                        mv.on('close', () => {
+                          console.log(chalk.green('The File was succefully moved'));
+                        });
+                      }
+                    });
                   }
                 });
               } else if (stats.isDirectory()) {
-                fs.cp(process.argv[3], process.argv[4], (err) => {
+                fs.access(process.argv[3], fs.constants.F_OK, (err) => {
                   if (err) {
-                    console.log(chalk.red('There must be a problem to copy the directory'));
+                    console.log(chalk.red('The first introduced path is wrong'));
                   } else {
-                    console.log(chalk.green('The directory was succefully copied'));
+                    fs.access(process.argv[4], fs.constants.F_OK, (err) => {
+                      if (err) {
+                        console.log(chalk.red('The second introduced path is wrong'));
+                      } else {
+                        const cp = spawn('cp', ['-r', process.argv[3], process.argv[4]]);
+                        cp.on('close', () => {
+                          console.log(chalk.green('The directory was succefully copied'));
+                        });
+                      }
+                    });
                   }
                 });
               }
@@ -193,7 +193,6 @@ export class CommandProgram {
         }
       },
     });
-
     yargs.parse();
   }
 }
