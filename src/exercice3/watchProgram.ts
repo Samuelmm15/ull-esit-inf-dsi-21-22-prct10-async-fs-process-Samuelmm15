@@ -1,8 +1,4 @@
 /* eslint-disable comma-dangle */
-// Usar el método watch()
-// Los cambios deben de ser controlados en el directorio
-// Indicar el tipo de cambio que se ha producido
-// Contestar a las últimas preguntas
 
 import * as fs from 'fs';
 import chalk from 'chalk';

@@ -603,7 +603,174 @@ yargs.command({
 
 - Prueba y testeo del ejercicio 3:
 
+  Ejecución terminal 1:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice3/watchProgram.js route src/exercice3/notes/Samuel/
+  ```
+
+  Ejecución terminal 2:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice3/exercice3.js add --user="Samuel" --title="newNote" --body="This i a test" --colour="yellow"
+  ```
+
+  Resultado terminal 1:
+
+  ```
+  Added a new File called newNote.json
+  ```
+
+  [IMAGEN]
+
+  Ejecución terminal 2:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice3/exercice3.js remove --user="Samuel" --title="newNote"
+  ```
+
+  Resultado terminal 1:
+
+  ```
+  Removed the File called newNote.json
+  ```
+
+  [IMAGEN]
+
+  Ejecución terminal 1:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice3/watchProgram.js route src/exercice3/notes/Samu
+  ```
+
+  Resultado terminal 1:
+
+  ```
+  The specified path does not exist
+  Specified a new path
+  ```
+
+  [IMAGEN]
+
 - Prueba y testeo del ejercicio 4:
+
+  Ejecución comando 1:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice4/exercice4.js mkdir test-dir
+  ```
+
+  Resultado comando 1:
+
+  ```
+  The directory was succefully created
+  ```
+
+  [IMAGEN]
+
+  Ejecución comando 2:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice4/exercice4.js file test-dir
+  ```
+
+  Resultado comando 2:
+
+  ```
+  test-dir
+  ```
+
+  [IMAGEN]
+
+  Ejecución comando 2:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice4/exercice4.js file index.md 
+  ```
+
+  Resultado comando 2:
+
+  ```
+  index.md: Java source, UTF-8 Unicode text, with very long lines
+  ```
+
+  [IMAGEN]
+
+  Ejecución comando 3:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice4/exercice4.js ls src/
+  ```
+
+  Resultado comando 3:
+
+  ```
+  Files
+  Modification
+  exercice1
+  exercice2
+  exercice3
+  exercice4
+  ```
+
+  [IMAGEN]
+
+  Ejecución del comando 4:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice4/exercice4.js cat README.md 
+  ```
+
+  Resultado del comando 4:
+
+  ```
+  # ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15
+  ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15 created by GitHub Classroom
+
+  Name: Samuel \
+  Surname: Martín Morales \
+  Course: Desarrollo de Sistemas Informáticos
+
+  [![Coveralls](https://github.com/ULL-ESIT-INF-DSI-2122/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15/actions/workflows/coveralls.yml/badge.svg)](https://github.com/ULL-ESIT-INF-DSI-2122/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15/actions/workflows/coveralls.yml)
+
+  [![Tests](https://github.com/ULL-ESIT-INF-DSI-2122/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15/actions/workflows/tests.js.yml/badge.svg)](https://github.com/ULL-ESIT-INF-DSI-2122/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15/actions/workflows/tests.js.yml)
+
+  [![SonarCloud](https://github.com/ULL-ESIT-INF-DSI-2122/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15/actions/workflows/build.yml/badge.svg)](https://github.com/ULL-ESIT-INF-DSI-2122/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15/actions/workflows/build.yml)
+
+  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ULL-ESIT-INF-DSI-2122_ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ULL-ESIT-INF-DSI-2122_ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15)
+  ```
+
+  [IMAGEN]
+
+  Ejecución del comando 5:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice4/exercice4.js rm test-dir/
+  ```
+
+  Resultado del comando 5:
+
+  ```
+  ? Are you sure to delete test-dir/ ? Yes
+  The directory was succefully deleted
+  ```
+
+  [IMAGEN]
+
+  Ejecución del comando 6:
+
+  ```
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Samuelmm15(main)]$node dist/exercice4/exercice4.js cp README.md src/
+  ```
+
+  Resultado del comando 6:
+
+  ```
+  The File was succefully moved
+  ```
+
+  [IMAGEN]
+
 ### // Conclusión <a name="id8"></a>
 
 Para concluir, este décima práctica de la asignatura, me ha permitido comprender un poco mejor, el manejo, empleo y creación de procesos en Node js, ya que, en ocasiones, me han generado ciertos problemas debido al desconocimiento en el correcto empleo de esto.
