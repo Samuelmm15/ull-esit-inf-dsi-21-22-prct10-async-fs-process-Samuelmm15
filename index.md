@@ -132,17 +132,17 @@ watcher.on('change', () => {
 ### // Contenido mostrado por consola:
 1.
 > Please, specify a file \
-2.
+2. \
 > Starting to watch file helloWorld.txt \
-3.
+3. \
 > File helloWorld.txt is no longer watched \
-4.
+4. \
 > File helloWorld.txt has been modified somehow \
-5.
+5. \
 > File helloWorld.txt is no longer watched \
-6.
+6. \
 > File helloWorld.txt has been modified somehow \
-7.
+7. \
 > File helloWorld.txt is no longer watched
 
 ### /// Funcionamiento de la función `access`
