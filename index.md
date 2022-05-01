@@ -131,17 +131,17 @@ watcher.on('change', () => {
 
 ### // Contenido mostrado por consola:
 1.
-> Please, specify a file
+> Please, specify a file \
 2.
-> Starting to watch file helloWorld.txt
+> Starting to watch file helloWorld.txt \
 3.
-> File helloWorld.txt is no longer watched
+> File helloWorld.txt is no longer watched \
 4.
-> File helloWorld.txt has been modified somehow
+> File helloWorld.txt has been modified somehow \
 5.
-> File helloWorld.txt is no longer watched
+> File helloWorld.txt is no longer watched \
 6.
-> File helloWorld.txt has been modified somehow
+> File helloWorld.txt has been modified somehow \
 7.
 > File helloWorld.txt is no longer watched
 
@@ -207,33 +207,6 @@ Dicha resolución se puede observar a continuación:
       }
     });
   }
-  private secondMethod() { // Esto es sin el método pipe
-    const catGrep = spawn('cat', [this.fileRoute, 'grep', this.word]);
-    let counter: number = 0;
-    let catGrepAuxiliary = '';
-    catGrep.stdout.on('data', (piece) => {
-      catGrepAuxiliary = piece.toString();
-    });
-    catGrep.on('close', () => {
-      console.log();
-      console.log(chalk.green('File Content:'));
-      console.log(chalk.grey(catGrepAuxiliary));
-      const result = catGrepAuxiliary.split(/\s+/);
-      result.forEach((item) => {
-        if (item === this.word) {
-          counter++;
-        }
-      });
-      if (counter === 0) {
-        console.log();
-        console.log(chalk.red(`There is no match of the filter ${this.word}`));
-      } else {
-        console.log();
-        console.log(chalk.blue(`The number of coincidencis is ${counter}`));
-      }
-    });
-  }
-}
 ```
 
 El segundo modo de poder resolver el problema, se encuentra en el uso del método `pipe`, pero en este caso no se va a redirigir la salida de un comando a otro, sino que, se hace uso de los subprocesos que sean necesarios para la resolución del problema.
@@ -310,7 +283,7 @@ yargs.command({
 Para finalizar con este tercera tarea, se han de responder una serie de preguntas:
 - ¿Cómo haría para mostrar, no solo el nombre, sino también el contenido del fichero, en el caso de que haya sido creado o modificado?
 
-Para poder mostrar el contenido del fichero creado o modificado, en este caso se puede hacer uso de la expansión del comando de linux `cat`, que permite mostrar el contenido del fichero que ha sido creado o que se ha modificado. Es por ello que cuando se produce un evento en el directorio del tipo de crear un nuevo fichero o que haya sido modificado uno existente, pues se aplica el método `spawn()` que permite extender el comando cat de linux, pudiendo mostrar el contenido de dicho fichero.
+Para poder mostrar el contenido del fichero creado o modificado, en este caso se puede hacer uso de la expansión del comando de linux `cat`, que permite mostrar el contenido del fichero que ha sido creado o que se ha modificado. Es por ello que cuando se produce un evento en el directorio del tipo de, crear un nuevo fichero o que haya sido modificado uno existente, pues se aplica el método `spawn()` que permite extender el comando cat de linux, pudiendo mostrar el contenido de dicho fichero.
 
 - ¿Cómo haría para que no solo se observase el directorio de un único usuario sino todos los directorios correspondientes a los diferentes usuarios de la aplicación de notas?
 
